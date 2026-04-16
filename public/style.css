@@ -564,40 +564,54 @@ hr {
     border-top: 1px solid var(--border-color, rgba(108, 2, 2, 0.1));
     margin: 25px 0;
 }
+/* Container principal dos botões */
 .controles-topo {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    display: flex; /* Alinha um ao lado do outro */
-    flex-direction: row-reverse; /* Faz o sol ficar na ponta direita e o logout ao lado dele */
-    gap: 10px; /* Espaço entre eles */
-    z-index: 9999;
+    position: fixed;    /* Faz a div "flutuar" na tela, independente do scroll */
+    right: 0;           /* Cola na borda direita */
+    top: 50%;           /* Move para o meio da altura */
+    transform: translateY(-50%); /* Centraliza perfeitamente no meio vertical */
+    display: flex;
+    flex-direction: column; /* Coloca um botão embaixo do outro */
+    gap: 12px;          /* Espaço entre os botões */
+    z-index: 9999;      /* Garante que fique na frente de tudo */
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1); /* Um fundo sutil para parecer um painel */
+    backdrop-filter: blur(5px);           /* Efeito de vidro embaçado */
+    border-radius: 20px 0 0 20px;         /* Arredonda só o lado esquerdo */
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* O botão agora NÃO tem posição fixa, ele segue o container */
+/* Estilo dos botões circulares dentro desse painel */
 .btn-circular {
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    cursor: pointer;
     border: none;
-    transition: 0.3s;
-    margin-top: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #fff; /* Fundo branco para os botões */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-.btn-logout {
-    text-decoration: none;
-    color: #333;
+/* Efeito ao passar o mouse */
+.btn-circular:hover {
+    transform: scale(1.1) translateX(-5px); /* Dá um pulinho para fora */
+    background-color: #f0f0f0;
 }
 
-.btn-logout:hover {
-    background-color: #ff0000;
-    color: white;
+/* Ajuste específico para Mobile */
+@media (max-width: 480px) {
+    .controles-topo {
+        padding: 8px 5px; /* Diminui o painel no celular */
+    }
+    
+    .btn-circular {
+        width: 40px;
+        height: 40px;
+    }
 }
 /* Ajuste para o modo escuro se necessário */
 body.dark-mode .btn-circular {
