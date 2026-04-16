@@ -42,6 +42,7 @@ app.use(
     },
   })
 );
+app.set('trust proxy', 1);
 // 2. CONFIGURAÇÃO DA SESSÃO (Tem que vir antes de qualquer rota!)
 app.use(session({
     secret: process.env.SESSION_SECRET || 'fallback-para-dev-apenas', // Puxa do .env
@@ -49,8 +50,9 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Fica TRUE automaticamente em produção
-        maxAge: 3600000 
+        secure: true, // No Railway é HTTPS, então precisa ser true
+        sameSite: 'lax', // Ajuda o navegador a aceitar o cookie
+        maxAge: 3600000
     }
 }));
 app.use((req, res, next) => {
