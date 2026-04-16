@@ -47,7 +47,7 @@
 <script>
    window.addEventListener('DOMContentLoaded', () => {
     
-    // 1. Animando o título (h1)
+   // 1. Animando o título (h1)
     gsap.from("h1", { 
       duration: 1, 
       y: -50, 
@@ -55,22 +55,22 @@
       ease: "back" 
     });
 
-    // 2. Animando a caixa principal (container)
-    gsap.from(".container", { 
-      duration: 1.2, 
-      scale: 0.8, 
-      opacity: 0, 
-      delay: 0.2 
+    // 2. Animando o Wrapper (fundo/partículas), em vez do container
+    gsap.from(".login-wrapper", {
+      duration: 1.5,
+      opacity: 0,
+      ease: "power2.inOut"
     });
 
-    // 3. Animando os inputs e o botão (em escadinha)
-    gsap.from(".input-login, .botao-login", { 
+    // 3. Animando os inputs, botão e parágrafo (stagger) dentro da caixa, SEM espremer a caixa branca
+    gsap.from(".input-login, .botao-login, p", { 
       duration: 0.8, 
-      x: -30, 
+      y: 30, // Animação de subida suave
       opacity: 0, 
-      stagger: 0.2, // Faz um aparecer depois do outro
+      stagger: 0.1, // Escadinha rápida
       delay: 0.5 
     });
+
   });
 </script>
 <script>
