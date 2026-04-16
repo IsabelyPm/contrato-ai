@@ -17,9 +17,10 @@ const rateLimit = require('express-rate-limit');
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutos
     max: 100, // Limita cada IP a 100 requisições por janela
+    validate: { xForwardedForHeader: false },
     message: "Muitas requisições vindas deste IP, tente novamente mais tarde."
 });
-
+app.set('trust proxy', 1);
 // 1. CONFIGURAÇÕES (Sempre primeiro)
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -42,7 +43,7 @@ app.use(
     },
   })
 );
-app.set('trust proxy', 1);
+
 // 2. CONFIGURAÇÃO DA SESSÃO (Tem que vir antes de qualquer rota!)
 app.use(session({
     secret: process.env.SESSION_SECRET || 'fallback-para-dev-apenas', // Puxa do .env
