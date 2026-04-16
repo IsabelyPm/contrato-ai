@@ -635,3 +635,29 @@ body.dark-mode .btn-circular {
     align-items: center; /* Centraliza os botões horizontalmente */
     padding: 20px;
 }
+
+/* RESPONSIVIDADE ---------------------------------------------------------- */
+
+/* Estilos para telas de celular (até 480px) */
+@media (max-width: 480px) {
+    .container {
+        width: 90%;          /* A caixa ocupa 90% da largura da tela */
+        margin: 50px auto;   /* Diminui a margem do topo para ganhar espaço */
+        padding: 20px;       /* Diminui o respiro interno da caixa branca */
+    }
+
+    h1 {
+        font-size: 1.8rem;   /* Diminui um pouco o tamanho do título */
+        margin-bottom: 20px;
+    }
+
+    .input-login {
+        padding: 12px;       /* Ajusta o tamanho dos campos para o dedo tocar fácil */
+        font-size: 16px;     /* Evita que o iPhone dê zoom automático no input */
+    }
+
+    .botao-login {
+        padding: 12px;
+        font-size: 1.1rem;
+    }
+}
