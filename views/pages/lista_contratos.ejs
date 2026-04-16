@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Contratos Realizados</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body style="background-color: #f4f4f4; padding-top: 100px;">
+
+  <main class="container-lista">
+    <header style="margin-bottom: 40px; text-align: center;">
+        <h1>Histórico de Documentos</h1>
+        <p>Abaixo estão todos os contratos gerados pelo sistema.</p>
+    </header>
+
+    <div id="gridPrincipal" class="grid-contratos">
+        </div>
+</main>
+
+<script>
+    const USER_ID = "<%= userId %>";
+async function carregarGaleria() {
+    const grid = document.getElementById('gridPrincipal');
+    try {
+        const response = await fetch('/api/listar-contratos');
+        const arquivos = await response.json();
+        
+        if (arquivos.length === 0) {
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px;">Nenhum contrato encontrado.</div>';
+            return;
+        }
+
+        // Renderiza os cards grandes na página principal
+        grid.innerHTML = arquivos.map(pdf => `
+            <div class="card-item-full">
+                <div class="nav-card-label">CONTRATO</div>
+                <h3 class="nav-card-title" style="color: #333; margin: 15px 0;">${pdf}</h3>
+                <a href="/contratos/${USER_ID}/${pdf}" target="_blank" class="btn-abrir">Visualizar →</a>
+                <button onclick="excluirContrato('${pdf}')" class="btn-excluir" style="  border:none; padding: 5px 5px; border-radius: 55px; cursor:pointer;">Excluir</button>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error("Erro ao carregar galeria:", error);
+    }
+}
+async function excluirContrato(nome) {
+    const confirmacao = await Swal.fire({
+        title: 'Tem certeza?',
+        text: "Você não poderá reverter isso!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ff5e8e',
+        cancelButtonColor: '#333',
+        confirmButtonText: 'Sim, excluir!',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (confirmacao.isConfirmed) {
+        try {
+            const response = await fetch('/api/excluir-contrato', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nomeArquivo: nome })
+            });
+
+            if (response.ok) {
+                // Aqui está o segredo: esperamos o usuário clicar em OK
+                Swal.fire({
+                    title: 'Deletado!',
+                    text: 'O contrato foi removido com sucesso.',
+                    icon: 'success',
+                    confirmButtonColor: '#ff5e8e'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload(); // Só recarrega após o OK
+                    }
+                });
+            } else {
+                Swal.fire('Erro!', 'Não foi possível excluir o arquivo.', 'error');
+            }
+        } catch (error) {
+            Swal.fire('Erro!', 'Houve um problema na comunicação com o servidor.', 'error');
+        }
+    }
+}
+document.addEventListener('DOMContentLoaded', carregarGaleria);
+</script>
+</body>
+</html>

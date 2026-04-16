@@ -1,0 +1,245 @@
+<%- include("../partials/header") %>
+
+<div class="card-nav-container">
+    <nav id="cardNav" class="card-nav">
+        <div class="card-nav-top">
+            <div id="menuToggle" class="hamburger-menu" role="button" aria-label="Abrir menu" tabindex="0">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </div>
+
+            <div class="logo-container">
+    <span class="logo-text">CONTRACT AI</span>
+</div>
+
+            <button type="button" class="card-nav-cta-button" onclick="window.location.href='/meus-contratos'">
+                Meus Contratos
+            </button>
+        </div>
+
+        <div id="listaNavegacao" class="card-nav-content">
+            <a href="/" class="nav-card">
+                <div class="nav-card-label">GERADOR</div>
+                <div class="nav-card-title">Criar Novo Contrato</div>
+            </a>
+            <a href="/meus-contratos" class="nav-card">
+                <div class="nav-card-label">HISTÓRICO</div>
+                <div class="nav-card-title">Ver Contratos Salvos</div>
+            </a>
+            <a href="/perfil" class="nav-card">
+                <div class="nav-card-label">PERFIL</div>
+                <div class="nav-card-title">Meus Dados</div>
+            </a>
+
+        </div>
+    </nav>
+</div>
+
+<div class="container" style="margin-top: 100px;">
+    <h1>ContractAI</h1>
+    <p>Automatize seus contratos em segundos</p>
+    <form action="/gerar" method="POST">
+        <h3>Dados do Contratante</h3>
+        <select name="tipoCliente" id="tipoCliente" required>
+            <option value="">Selecione o tipo</option>
+            <option value="pf">Pessoa Física</option>
+            <option value="pj">Pessoa Jurídica</option>
+        </select>
+        <div id="cliente-dinamico"></div>
+
+        <hr class="form-divider">
+
+        <h3>Dados do Prestador (Contratado)</h3>
+        <select name="tipoPrestador" id="tipoPrestador" required>
+            <option value="">Selecione o tipo</option>
+            <option value="pf">Pessoa Física</option>
+            <option value="pj">Pessoa Jurídica</option>
+        </select>
+        <div id="prestador-dinamico"></div>
+
+        <hr style="border: 0.5px solid #333; margin: 20px 0;">
+
+        <h3>Detalhes do Contrato</h3>
+        <select name="servico" required>
+            <option value="">Selecione o serviço</option>
+            <option value="Criação de Branding">Criação de Branding</option>
+            <option value="Gestão de Redes Sociais">Gestão de Redes Sociais</option>
+            <option value="Desenvolvimento Web">Desenvolvimento Web</option>
+            <option value="Marketing Digital">Marketing Digital</option>
+        </select>
+
+        <input type="text" name="valor" placeholder="Valor do contrato (Ex: 1.500,00)" required>
+        <input type="text" name="cidade" placeholder="Cidade (para o Foro)" required>
+
+        <h3>Prazo</h3>
+       <label>Data de Início:</label>
+<input type="date" id="inicio" name="inicio">
+        <input type="text" name="vigor" placeholder="Duração/Vigor (Ex: 6 meses ou Indeterminado)" required>
+
+        <h3>Forma de Pagamento</h3>
+        <select name="formaPagamento" id="formaPagamento" required>
+            <option value="">Selecione</option>
+            <option value="pix">PIX / À vista</option>
+            <option value="cartao">Cartão / Parcelado</option>
+        </select>
+        <div id="pagamento-dinamico"></div>
+
+        <button type="submit">Gerar contrato oficial</button>
+    </form>
+</div>
+
+<script>
+    // Lógica Dinâmica para CONTRATANTE
+    const tipoCliente = document.getElementById("tipoCliente");
+    const clienteDiv = document.getElementById("cliente-dinamico");
+
+    tipoCliente.addEventListener("change", () => {
+        const tipo = tipoCliente.value;
+        if (tipo === "pf") {
+            clienteDiv.innerHTML = `
+                <input type="text" name="nome" placeholder="Nome completo" required>
+                <input type="date" name="nascimento" placeholder="Data de Nascimento" required>
+                <input type="text" name="documento" id="documento" placeholder="CPF" maxlength="14" required>
+                <input type="text" name="rg" placeholder="RG">
+                <input type="email" name="email" placeholder="E-mail" required>
+                <input type="text" name="celular" id="celular" placeholder="Celular" maxlength="19">
+                <input type="text" name="rua" placeholder="Logradouro" required>
+                <input type="text" name="numero" placeholder="Número" required>
+                <input type="text" name="bairro" placeholder="Bairro" required>
+                <input type="text" name="cep" placeholder="CEP" required>
+                <input type="text" name="estadoPais" placeholder="Estado e País" required>`;
+        } else if (tipo === "pj") {
+            clienteDiv.innerHTML = `
+                <input type="text" name="razaoSocial" placeholder="Razão Social" required>
+                <input type="text" name="documento" placeholder="CNPJ" required>
+                <input type="text" name="rg" placeholder="Inscrição Estadual">
+                <input type="email" name="email" placeholder="E-mail Corporativo" required>
+                <input type="text" name="celular" placeholder="Telefone Comercial" required>
+                <input type="text" name="rua" placeholder="Logradouro" required>
+                <input type="text" name="numero" placeholder="Número" required>
+                <input type="text" name="bairro" placeholder="Bairro" required>
+                <input type="text" name="cep" placeholder="CEP" required>
+                <input type="text" name="estadoPais" placeholder="Estado e País" required>`;
+        } else {
+            clienteDiv.innerHTML = "";
+        }
+    });
+
+    // Lógica Dinâmica para CONTRATADO
+    const tipoPrestador = document.getElementById("tipoPrestador");
+    const prestadorDiv = document.getElementById("prestador-dinamico");
+
+    tipoPrestador.addEventListener("change", () => {
+        const tipo = tipoPrestador.value;
+        if (tipo === "pf") {
+            prestadorDiv.innerHTML = `
+                <input type="text" name="nomePrestador" placeholder="Nome completo" required>
+                <input type="date" name="nascimentoPrestador" placeholder="Data de Nascimento" required>
+                <input type="text" name="documentoPrestador" id="documentoPrestador" placeholder="CPF" maxlength="14" required>
+                <input type="text" name="rgPrestador" placeholder="RG">
+                <input type="email" name="emailPrestador" placeholder="E-mail" required>
+                <input type="text" name="celularPrestador" id="celularPrestador" placeholder="Celular" maxlength="19">
+                <input type="text" name="ruaPrestador" placeholder="Logradouro" required>
+                <input type="text" name="numeroPrestador" placeholder="Número" required>
+                <input type="text" name="bairroPrestador" placeholder="Bairro" required>
+                <input type="text" name="cepPrestador" placeholder="CEP" required>
+                <input type="text" name="estadoPaisPrestador" placeholder="Estado e País" required>`;
+        } else if (tipo === "pj") {
+            prestadorDiv.innerHTML = `
+                <input type="text" name="razaoSocialPrestador" placeholder="Razão Social" required>
+                 <input type="date" name="nascimentoPrestador" placeholder="Data de Nascimento" required>
+                <input type="text" name="documentoPrestador" placeholder="CNPJ" required>
+                <input type="text" name="rgPrestador" placeholder="Inscrição Estadual">
+                <input type="email" name="emailPrestador" placeholder="E-mail Corporativo" required>
+                <input type="text" name="celularPrestador" placeholder="Telefone Comercial" required>
+                <input type="text" name="ruaPrestador" placeholder="Logradouro" required>
+                <input type="text" name="numeroPrestador" placeholder="Número" required>
+                <input type="text" name="bairroPrestador" placeholder="Bairro" required>
+                <input type="text" name="cepPrestador" placeholder="CEP" required>
+                <input type="text" name="estadoPaisPrestador" placeholder="Estado e País" required>`;
+        } else {
+            prestadorDiv.innerHTML = "";
+        }
+    });
+
+    // Lógica de Pagamento
+    const pagamento = document.getElementById("formaPagamento");
+    const pagamentoDiv = document.getElementById("pagamento-dinamico");
+    pagamento.addEventListener("change", () => {
+        if (pagamento.value === "pix") {
+            pagamentoDiv.innerHTML = `<input type="number" name="dataPagamento" placeholder="Dia do vencimento" required>`;
+        } else if (pagamento.value === "cartao") {
+            pagamentoDiv.innerHTML = `
+                <input type="number" name="parcelas" placeholder="Número de Parcelas" required>
+                <input type="number" name="dataPagamento" placeholder="Dia do vencimento" required>`;
+        } else {
+            pagamentoDiv.innerHTML = "";
+        }
+    });
+
+    // Máscaras e Bloqueios
+    const form = document.querySelector('form');
+    form.addEventListener('input', (e) => {
+        const target = e.target;
+
+        // Máscara CPF/CNPJ Dinâmica
+        if (target.name === 'documento' || target.name === 'documentoPrestador') {
+            let v = target.value.replace(/\D/g, "");
+            if (v.length <= 11) {
+                v = v.replace(/(\d{3})(\d)/, "$1.$2");
+                v = v.replace(/(\d{3})(\d)/, "$1.$2");
+                v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+            } else {
+                v = v.replace(/^(\d{2})(\d)/, "$1.$2");
+                v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+                v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
+                v = v.replace(/(\d{4})(\d)/, "$1-$2");
+            }
+            target.value = v;
+        }
+
+        // Máscara Celular
+        if (target.name === 'celular' || target.name === 'celularPrestador') {
+            let v = target.value.replace(/\D/g, "");
+            v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+            v = v.replace(/(\d{5})(\d)/, "$1-$2");
+            target.value = v;
+        }
+
+        // Bloqueios de texto
+        if (['nome', 'cidade', 'nomePrestador'].includes(target.name)) {
+            target.value = target.value.replace(/[0-9]/g, "");
+        }
+        if (target.name === 'valor') {
+            target.value = target.value.replace(/[^\d,.]/g, "");
+        }
+    });
+document.addEventListener('DOMContentLoaded', () => {
+    let isExpanded = false;
+    const nav = document.getElementById('cardNav');
+    const content = document.getElementById('listaNavegacao'); // Nome atualizado
+    const toggle = document.getElementById('menuToggle');
+
+    // Verificação de segurança para evitar erro "querySelector of null"
+    if (toggle && nav && content) {
+        toggle.addEventListener('click', () => {
+            isExpanded = !isExpanded;
+            toggle.classList.toggle('open');
+
+            if (isExpanded) {
+                // Animação para Abrir
+                gsap.to(nav, { height: 'auto', duration: 0.5, ease: "power3.out" });
+                gsap.to(content, { opacity: 1, pointerEvents: 'auto', duration: 0.3, delay: 0.2 });
+            } else {
+                // Animação para Fechar
+                gsap.to(content, { opacity: 0, pointerEvents: 'none', duration: 0.2 });
+                gsap.to(nav, { height: 60, duration: 0.5, ease: "power3.inOut" });
+            }
+        });
+    }
+    
+    // IMPORTANTE: Remova ou comente a linha carregarContratosNoMenu 
+    // para que os arquivos não apareçam no menu de navegação.
+});
+</script>
+<%- include("../partials/footer") %>

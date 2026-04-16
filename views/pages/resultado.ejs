@@ -1,0 +1,29 @@
+<%- include("../partials/header") %>
+
+<div class="result-page-container">
+    <h1 class="page-title">CONTRATO GERADO!</h1>
+
+    <div class="top-actions">
+        <a href="/" class="btn-back">
+            <span class="arrow">←</span> Criar Novo Contrato
+        </a>
+    </div>
+
+    <main class="contract-paper">
+        <div class="contract-content">
+            <div style="white-space: pre-wrap; font-family: 'Times New Roman', serif;">
+                <%= contrato %>
+            </div>
+        </div>
+    </main>
+
+    <div class="action-footer">
+        <% if (typeof arquivo !== 'undefined') { %>
+            <a href="/contratos/<%= userId %>/<%= arquivo %>" download class="btn-download">
+                Baixar PDF Oficial
+            </a>
+        <% } %>
+    </div>
+</div>
+
+<%- include("../partials/footer") %>

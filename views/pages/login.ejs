@@ -1,0 +1,135 @@
+<%- include("../partials/header") %>
+<body>
+  <div id="tsparticles" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+
+  <div class="login-wrapper">
+<div class="container" style="margin-top: 100px; max-width: 400px;">
+    <h1>Login</h1>
+    <form action="/login" method="POST">
+        <input type="email" name="email" class="input-login" placeholder="E-mail" required>
+        <input type="password" name="senha" class="input-login" placeholder="Senha" required>
+        <button type="submit" class="botao-login">Entrar</button>
+    </form>
+    <p>Ainda não tem conta? <a href="/cadastro">Cadastre-se</a></p>
+</div>
+</div>
+</body>
+<script>
+// 1. Pega os parâmetros da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const erro = urlParams.get('erro');
+
+    // 2. Se existir algum erro, mostra o alerta
+    if (erro) {
+        let mensagem = "Verifique seus dados e tente novamente.";
+        let titulo = "Erro no Login";
+
+        // Personaliza a mensagem baseada no que veio do servidor
+        if (erro === 'usuario_nao_encontrado') {
+            mensagem = "Este e-mail não está cadastrado.";
+        } else if (erro === 'senha_incorreta') {
+            mensagem = "A senha digitada está incorreta.";
+        }
+
+        Swal.fire({
+            icon: 'error',
+            title: titulo,
+            text: mensagem,
+            confirmButtonColor: '#ff5e8e'
+        }).then(() => {
+            // Limpa a URL para o erro não reaparecer no F5
+            window.history.replaceState({}, document.title, "/login");
+        });
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script>
+    // Usamos GSAP para animar a entrada
+    gsap.from(".login-header h1", { 
+        duration: 1, 
+        y: -50, // Vem de cima
+        opacity: 0, 
+        ease: "power3.out" 
+    });
+
+    gsap.from(".login-box", { 
+        duration: 1.2, 
+        y: 100, // Vem de baixo
+        opacity: 0, 
+        ease: "back.out(1.7)", // Dá um leve "pulo" no final
+        delay: 0.3 // Espera o título começar
+    });
+
+    // Anima os inputs e o botão com atraso entre eles (stagger)
+    gsap.from(".input-group, .btn-login", { 
+        duration: 0.8, 
+        opacity: 0, 
+        y: 20, 
+        stagger: 0.2, // 0.2s de atraso entre cada elemento
+        ease: "power2.out",
+        delay: 0.8 // Começa depois que a box chegou
+    });
+</script>
+<script>
+  tsParticles.load("tsparticles", {
+    fpsLimit: 60,
+    interactivity: {
+      events: {
+        onClick: { enable: false }, // Desativa clique para não distrair do form
+        onHover: { 
+          enable: true, // Ativa reação ao mouse
+          mode: "grab" // As linhas se "conectam" ao mouse
+        },
+        resize: true
+      },
+      modes: {
+        grab: {
+          distance: 140, // Distância de conexão com o mouse
+          links: { opacity: 0.5 }
+        }
+      }
+    },
+    particles: {
+      color: { 
+        value: ["#ff5e8e", "#4ae3b5"] // Sua cor rosa e uma cor tech secundária (verde água)
+      },
+      links: {
+        color: "#ccc", // Cor das linhas de conexão
+        distance: 150,
+        enable: true,
+        opacity: 0.2, // Mantém as linhas sutis
+        width: 1
+      },
+      move: {
+        direction: "none",
+        enable: true,
+        outModes: { default: "out" },
+        random: false,
+        speed: 1, // Movimento bem lento e suave
+        straight: false
+      },
+      number: {
+        density: { enable: true, area: 800 },
+        value: 80 // Quantidade de partículas (aumente se quiser mais denso)
+      },
+      opacity: {
+        value: { min: 0.1, max: 0.5 }, // Partículas piscam suavemente
+        animation: {
+          enable: true,
+          speed: 1,
+          minimumValue: 0.1,
+          sync: false
+        }
+      },
+      size: {
+        value: { min: 1, max: 3 } // Tamanho variado
+      },
+      shape: {
+        type: "circle" // Formato redondo (pode mudar para 'triangle' ou 'polygon')
+      }
+    },
+    detectRetina: true
+  });
+</script>
+<%- include("../partials/footer") %>

@@ -1,0 +1,56 @@
+<%- include("../partials/header") %>
+<div class="card-login" style="padding: 30px; border-radius: 15px;">
+    <h2 style="color: #b40000; text-align: center;">Meus Dados</h2>
+    
+    <form action="/perfil/atualizar" method="POST" enctype="multipart/form-data">
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="/images/<%= usuario.foto_perfil || 'default-avatar.png' %>" 
+                 style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #930101;">
+            <br>
+            <label style="display: block; margin-top: 10px; font-size: 14px;">Alterar Foto</label>
+            <input type="file" name="foto"class="input-foto" accept="image/*" style="margin-top: 5px; color: white; font-size: 12px;">
+        </div>
+
+        <label>Nome</label>
+        <input type="text" name="nome" class="input-login" value="<%= usuario.nome %>" required>
+
+        <label>E-mail (Login)</label>
+        <input type="email" class="input-login" value="<%= usuario.email %>" disabled style="opacity: 0.6;">
+
+        <label> Telefone</label>
+        <input type="text" name="telefone" class="input-login" value="<%= usuario.telefone || '' %>" placeholder="(00) 00000-0000">
+
+        <hr style="margin: 20px 0; border-color: #900101;">
+        
+        <h3 >Segurança</h3>
+        <label>Nova Senha</label>
+        <input type="password" name="novaSenha" class="input-login" placeholder="Deixe em branco para não mudar">
+
+        <button type="submit" class="botao-login">Salvar Alterações</button>
+    </form>
+</div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    if (urlParams.get('sucesso')) {
+        Swal.fire({
+            title: 'Perfil Atualizado!',
+            text: 'Seus dados foram salvos com sucesso.',
+            icon: 'success',
+            confirmButtonColor: '#ff5e8e'
+        });
+       window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    if (urlParams.get('erro')) {
+        Swal.fire({
+            title: 'Erro!',
+            text: 'Não foi possível atualizar seus dados.',
+            icon: 'error',
+            confirmButtonColor: '#ff5e8e'
+        });
+    window.history.replaceState({}, document.title, window.location.pathname);
+    }
+</script>
+<%- include("../partials/footer") %>

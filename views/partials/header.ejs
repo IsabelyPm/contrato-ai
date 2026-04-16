@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>ContractAI</title>
+<link rel="stylesheet" href="/style.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+<div class="controles-topo">
+   <button id="theme-toggle" class="btn-circular" title="Alternar Modo Claro/Escuro">
+        <span id="theme-icon">☀️</span>
+    </button>
+    <a href="/logout" class="btn-circular btn-logout" title="Sair da Sessão">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+    </a>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlElement = document.documentElement;
+
+    // 1. Ao carregar a página, verifica o que o usuário escolheu antes
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    
+    // 2. Aplica o tema imediatamente
+    htmlElement.setAttribute('data-theme', savedTheme);
+    themeIcon.innerText = savedTheme === 'dark' ? '☁️' : '☀️';
+
+    // 3. Escuta o clique no botão
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            htmlElement.setAttribute('data-theme', newTheme);
+            themeIcon.innerText = newTheme === 'dark' ? '☁️' : '☀️';
+            
+            // 4. Salva no navegador do usuário
+            localStorage.setItem('theme', newTheme);
+        });
+    }
+});
+</script>
