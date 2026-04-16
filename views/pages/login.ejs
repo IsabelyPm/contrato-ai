@@ -45,27 +45,25 @@
 <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script>
-   window.addEventListener('DOMContentLoaded', () => {
-    // 1. Título
-    gsap.from("h1", { duration: 1, y: -20, opacity: 0 });
+ window.addEventListener('DOMContentLoaded', () => {
 
-    // 2. Os inputs - vamos usar o nome da classe que você colocou no HTML
-    // Se você usou class="input-login", o seletor é .input-login
-    gsap.from(".input-login", { 
-      duration: 0.8, 
-      opacity: 0, 
-      y: 20, 
-      stagger: 0.2, 
-      delay: 0.3 
+    // 1. Uma animação sutil e elegante para o FUNDO (Wrapper)
+    // O fundo vai aparecer de uma transparência suave para visível.
+    gsap.from(".login-wrapper", {
+      duration: 2.0, // Bem lento para dar um ar premium
+      opacity: 0,
+      ease: "power2.inOut" // Começa e termina devagar
     });
 
-    // 3. O botão
-    gsap.from(".botao-login", { 
-      duration: 0.8, 
-      opacity: 0, 
-      scale: 0.5, 
-      delay: 0.8 
+    // 2. Animando o TÍTULO (<h1>) de cima para baixo
+    // Isso é super seguro porque não afeta o box branco.
+    gsap.from("h1", {
+      duration: 1.2,
+      y: -30, // Começa 30px acima
+      opacity: 0,
+      ease: "back.out(1.7)" // Um efeito leve de "rebote"
     });
+
   });
 </script>
 <script>
