@@ -45,31 +45,33 @@
 <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script>
-    // Usamos GSAP para animar a entrada
-    gsap.from(".login-header h1", { 
-        duration: 1, 
-        y: -50, // Vem de cima
-        opacity: 0, 
-        ease: "power3.out" 
+   window.addEventListener('DOMContentLoaded', () => {
+    
+    // 1. Animando o título (h1)
+    gsap.from("h1", { 
+      duration: 1, 
+      y: -50, 
+      opacity: 0, 
+      ease: "back" 
     });
 
-    gsap.from(".login-box", { 
-        duration: 1.2, 
-        y: 100, // Vem de baixo
-        opacity: 0, 
-        ease: "back.out(1.7)", // Dá um leve "pulo" no final
-        delay: 0.3 // Espera o título começar
+    // 2. Animando a caixa principal (container)
+    gsap.from(".container", { 
+      duration: 1.2, 
+      scale: 0.8, 
+      opacity: 0, 
+      delay: 0.2 
     });
 
-    // Anima os inputs e o botão com atraso entre eles (stagger)
-    gsap.from(".input-group, .btn-login", { 
-        duration: 0.8, 
-        opacity: 0, 
-        y: 20, 
-        stagger: 0.2, // 0.2s de atraso entre cada elemento
-        ease: "power2.out",
-        delay: 0.8 // Começa depois que a box chegou
+    // 3. Animando os inputs e o botão (em escadinha)
+    gsap.from(".input-login, .botao-login", { 
+      duration: 0.8, 
+      x: -30, 
+      opacity: 0, 
+      stagger: 0.2, // Faz um aparecer depois do outro
+      delay: 0.5 
     });
+  });
 </script>
 <script>
   tsParticles.load("tsparticles", {
